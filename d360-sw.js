@@ -266,7 +266,7 @@ D360SimpleEventEmitter.sendEvent = function (event, props, sessionId, callback) 
         if(D360SimpleEventEmitter.deviceId.api_token != undefined)
             headers['D360-Api-Token'] = D360SimpleEventEmitter.deviceId.api_token;
     }
-    fetch('https://rt.360dialog.io/xray/events/360dialog/sdk/v1', {
+    fetch('https://staging-rt.360dialog.io/xray/events/360dialog/sdk/v1', {
         method: 'post',
         headers: headers,
         body: content
