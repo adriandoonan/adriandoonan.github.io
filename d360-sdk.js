@@ -245,7 +245,7 @@ D360PushState.prototype.wipeDeviceData = function (data) {
         me.logger.log(D360LoggerSeverity.ERROR, 'DB successfully removed', 'indexeddb', event)
     };
 
-    navigator.serviceWorker.getRegistration('./dev/d360-sw.js').then(function(registration) {
+    navigator.serviceWorker.getRegistration('/d360-sw.js').then(function(registration) {
         console.log(registration);
         registration.unregister().then(function() {
             this.logger.log(D360LoggerSeverity.ERROR, 'Service worker successfully unregistered. Reload your page', 'D360PushState')
@@ -475,7 +475,7 @@ D360Push.prototype.initServiceWorker = function (callback) {
         }
     })
 
-    navigator.serviceWorker.register('/dev/d360-sw.js')
+    navigator.serviceWorker.register('/d360-sw.js')
         .then(function (registration) {
             me.deviceId = null;
             if (window.localStorage.D360deviceId) {
