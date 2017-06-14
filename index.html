@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript">
+        var D360 = [];
+        var D360Options = {
+            requestPushOnLoad: false,
+            appId: '15',
+            userId: null,
+            apiSecret: '753005ae1a572c7269f99b14334ffb9d3a82b7909667c1a9047a1b4bc2be810a',
+        }
+    </script>
+    <script type="text/javascript" src="d360-sdk.js" async></script>
+    <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+    <p>State: <strong id="state"></strong></p>
+    <p>External User Id: <input id="userId"><input id="userIdSave" type="button" value="Save"/> </p>
+    <input type="button" id="requestPush" value="Request push" />
+    <input type="button" id="removePush" value="Unsubscribe" />
+
+<script type="text/javascript">
+    document.getElementById('userId').value =window.localStorage.getItem('userId');
+    document.getElementById('userIdSave').onclick = function() {
+        window.localStorage.setItem('userId', document.getElementById('userId').value);
+        D360.push('updateExternalData', {userId: document.getElementById('userId').value});
+    };
+
+
+    var status = 'offline';
+    function updateStatus(in_status, bodyClass) {
+        status = in_status;
+        document.getElementById('state').innerHTML = status;
+        var classes = document.body.className = bodyClass;
+    }
+    function getWebPushStatus() {
+        if(!window.D360PushState) {return ;}
+        if(!window.D360PushState.getActiveSubscription()) {
+            return updateStatus('supported, not subscribed', 'supported');
+        }
+        if(D360PushState.getActiveSubscription()) {
+            return updateStatus('active subscription', 'subscribed');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('requestPush').onclick = function() {
+            D360.push(["requestPushNotification"]);
+            getWebPushStatus();
+        };
+        document.getElementById('removePush').onclick = function() {
+            D360.push(["unregister"]);
+        };
+    });
+    setInterval(function() {
+        getWebPushStatus()
+    },1000);
+    getWebPushStatus();
+</script>
+<style type="text/css">
+    #requestPush, #removePush {
+        display: none;
+    }
+
+    .supported #requestPush {
+        display: block;
+    }
+    .subscribed #removePush {
+        display: block;
+    }
+</style>
+</body>
+</html>
